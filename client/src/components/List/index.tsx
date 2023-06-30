@@ -1,51 +1,47 @@
-import { FC, ReactElement, useEffect, useState } from "react";
-import styles from "./List.module.scss";
-import { IVote } from "../../types/vote.interface";
-import { ITheme } from "../../types/theme.interface";
-import Button from "../Button";
-import Popup from "../Popup";
-import CreateTheme from "../CreateTheme";
-import axios from "axios";
+import { FC, useEffect, useState} from 'react';
+import { getData } from './debug';
+import Button from '../Button';
+import './List.css';
 
-interface IProps {
-  url: string;
-  ItemTemplate: any;
-  onItemClick: (id: number) => void;
-  onCreate: () => void;
-  type: "theme" | "vote";
+interface ILIstProps {
+    ItemTemplate: any;
+    source: {
+        url: string
+    };
+    onItemClick: Function;
 }
 
-const getData = () =>
-  new Promise((resolve, reject) => {
-    setTimeout;
-  });
+const BaseList: FC<ILIstProps> = ({ItemTemplate, onItemClick}) => {
 
-const List: FC<IProps> = ({}) => {
-  const [isShowPopup, setIsShowPopup] = useState(false);
-  const [data, setData] = useState<any[]>([]);
-  // useEffect(async () => {
-  //   const data = await getData()
-  //   setData(data)
-  // })
-  return (
-    <aside>
-      <Popup isShow={isShowPopup}>
-        <CreateTheme />
-      </Popup>
-      <ul>
-        {/* {
-          data.map((item, idx) => <ItemTemplate key={idx} title={item.} />)
-        } */}
-      </ul>
-      <Button
-        onClick={() => {
-          setIsShowPopup(true);
-        }}
-      >
-        Создать
-      </Button>
-    </aside>
-  );
-};
+    const [items, setItems] = useState([]);
 
-export default List;
+    useEffect(() => {
+        getData().then(data => {
+            setItems(data as any);
+        })
+    }, []);
+
+    function addBtnClickedCallback(name: string): void {
+        setItems((prev: any) => [
+            ...prev,
+            {
+                id: new Date().getTime(),
+                title: name,
+                date: new Date()
+            }
+        ] as any);
+    }
+
+    return (
+        <div className='baseList__container'>
+            <ul className='baseList__container'>
+                {items.map((el: any) => {
+                    return <ItemTemplate key={el.id} item={el} onClick={onItemClick}/>
+                })}
+            </ul>
+            <Button caption='Добавить' onClick={addBtnClickedCallback}/>
+        </div>
+    )
+}
+
+export default BaseList;

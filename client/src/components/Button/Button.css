@@ -1,0 +1,24 @@
+.button{
+    background-color: #b53636;
+    height: 40px;
+    cursor:pointer;
+    border-radius: 5px;
+    text-transform:uppercase;
+    color:aliceblue;
+    border: 1px solid #b53636;
+    font-weight: 700;
+    font-size:14px;
+    display: flex;
+    align-items: center;
+    justify-content:center ;
+    transition: 0.1s ;
+    will-change: background-color transform;
+    padding: 0 5px;
+}
+
+.button:hover{
+    background-color: aqua;
+        }
+        .button:active{
+            transform: scale(1.05);
+        }

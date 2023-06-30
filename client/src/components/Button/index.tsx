@@ -1,20 +1,15 @@
-import { FC, PropsWithChildren } from "react";
+import { FC } from 'react';
+import './Button.css';
 
 interface IProps {
-  onClick?: () => void;
-  className?: string;
+    caption: string;
+    onClick: Function;
 }
 
-const Button: FC<PropsWithChildren<IProps>> = ({
-  children,
-  onClick,
-  className,
-}) => {
-  return (
-    <button onClick={onClick} className={className}>
-      {children}
-    </button>
-  );
+const Button: FC <IProps> = (Props) => {
+    return (
+        <div onClick={() => Props.onClick()} className='button'>{Props.caption}</div>
+    );
 };
 
 export default Button;
