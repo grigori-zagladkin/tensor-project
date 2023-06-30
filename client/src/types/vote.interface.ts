@@ -3,6 +3,10 @@ export interface IVoteResult {
   disagree: number;
 }
 
+export interface ICreateVote {
+  title: string;
+}
+
 export interface IVote {
   id: number;
   title: string;

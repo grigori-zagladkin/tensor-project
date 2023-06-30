@@ -27,19 +27,16 @@ const Main: FC<IProps> = ({ theme }) => {
               alert("Произошла ошибка");
             }
           }}
-          className={styles.btn}
-        >
-          Отправить результат
-        </Button>
+          caption="Отправить результат"
+        />
       )}
       {!isShowSnapshot && (
         <Button
           onClick={() => {
             setIsShowSnapshot(true);
           }}
-        >
-          Начать голосование
-        </Button>
+          caption="Начать голосование"
+        />
       )}
     </section>
   );

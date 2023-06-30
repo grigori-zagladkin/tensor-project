@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, useState } from "react";
-import List from "../List";
-import ItemTemplate from "../ItemTemplate";
+import BaseList from "../List";
+import VoteItem from "../VoteItem";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -11,7 +11,13 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
         gap: "50px",
       }}
     >
-      {/* <List itemTemplate={ItemTemplate}  /> */}
+      <BaseList
+        ItemTemplate={VoteItem}
+        source={{
+          url: "",
+        }}
+        onItemClick={() => {}}
+      />
       <div>{children}</div>
     </div>
   );
