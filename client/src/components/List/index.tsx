@@ -7,6 +7,7 @@ import CreateTheme from "../CreateTheme";
 import { ICreateTheme } from "../../types/theme.interface";
 
 interface ILIstProps {
+  className?: string;
   ItemTemplate: any;
   source: {
     url: string;
@@ -14,7 +15,7 @@ interface ILIstProps {
   onItemClick: Function;
 }
 
-const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick }) => {
+const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick, className }) => {
   const [items, setItems] = useState([]);
 
   const [isShow, setIsShow] = useState(false);
@@ -25,23 +26,8 @@ const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick }) => {
     });
   }, []);
 
-  function addBtnClickedCallback(name: string): void {
-    setItems(
-      (prev: any) =>
-        [
-          ...prev,
-          {
-            id: new Date().getTime(),
-            title: name,
-            date: new Date(),
-          },
-        ] as any
-    );
-    setIsShow(true);
-  }
-
   return (
-    <div className="baseList__container">
+    <div className={`baseList__container ${className}`}>
       <Popup
         onClose={() => {
           setIsShow(false);
@@ -70,7 +56,7 @@ const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick }) => {
           return <ItemTemplate key={el.id} item={el} onClick={onItemClick} />;
         })}
       </ul>
-      <Button caption="Добавить" onClick={addBtnClickedCallback} />
+      <Button caption="Добавить" onClick={() => setIsShow(true)} />
     </div>
   );
 };

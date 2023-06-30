@@ -6,7 +6,8 @@ interface IProps {
         title: string; //18
         date: Date; // 12
         status: number;
-    }
+    },
+    onClick: Function;
 }
 
 interface IStatuses {
@@ -24,13 +25,13 @@ function getStatusName(statusIndex: number): string {
 
 const VoteItem : FC <IProps> = (Props) => {
     return (
-        <div className='voteItem'>
+        <div className='voteItem' onClick={() => Props.onClick(Props.item)}>
             <div>
                 <p className ="voteItem__title">{Props.item.title}</p>
                 <p className ="voteItem__date">{Props.item.date.toDateString()}</p>
             </div>
             <div className='voteItem__status__container ' style={{flex: '0 1 30px'}}>
-                <div className={`voteItem__status voteItem__status__success`}></div>
+                <div className={`voteItem__status voteItem__status__${getStatusName(Props.item.status)}`}></div>
             </div>
         </div>
 

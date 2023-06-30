@@ -82,3 +82,23 @@ button:focus-visible {
   max-width: 350px;
   height: 100%;
 }
+
+.navigation__list {
+  min-width: 100%;
+  transition: .3s;
+}
+
+.naviagtion_container {
+  flex: 0 1 30vw;
+  min-width: 200px;
+  max-width: 350px;
+  overflow: hidden;
+}
+
+.workspace__container {
+  flex: 1;
+}
+
+.topic-selected {
+  transform: translateX(-100%);
+}
