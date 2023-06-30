@@ -1,0 +1,11 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-items: start;
+  align-items: start;
+}
+
+.btn {
+  align-self: end;
+}

@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  gap: 20px;
+  max-height: 400px;
+}
+
+.cameraImg {
+  max-width: 400px;
+  max-height: 400px;
+  overflow: hidden;
+
+  > img {
+    width: full;
+    height: full;
+  }
+}
