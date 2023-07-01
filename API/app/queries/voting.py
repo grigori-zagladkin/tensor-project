@@ -23,5 +23,5 @@ async def get_all_voting_from_bd():
         SELECT * FROM votings
     """
     async with DB.pool.acquire() as conn:
-        result = await conn.fetchrow(sql)
+        result = await conn.fetch(sql)
         return result
