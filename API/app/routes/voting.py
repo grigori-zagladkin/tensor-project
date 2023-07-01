@@ -12,8 +12,8 @@ voting_router = APIRouter(tags=['Голосование'])
 async def create_voting(data=Body()):
     title = data['title']
     date_voting = date.today()
-    await create_voting_to_bd(title, date_voting)
-    return True #поменять на тру
+    return await create_voting_to_bd(title, date_voting)
+
 
 @voting_router.get('/get_voting')
 async def get_voting(voting_id: int):

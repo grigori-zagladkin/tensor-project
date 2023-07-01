@@ -3,11 +3,12 @@ from app.servecise.database import DB
 
 async def create_themes_to_bd(title: str, descr: str, vote_id: int):
     sql = '''
-    INSERT INTO themes (title, description, vote_id) 
-    VALUES ($1, $2, $3);
+    INSERT INTO themes (title, description, vote_id, res) 
+    VALUES ($1, $2, $3, ARRAY[]::integer[])
+    RETURNING *
     '''
     async with DB.pool.acquire() as conn:
-        await conn.execute(sql, title, descr, vote_id)
+        return await conn.fetchrow(sql, title, descr, vote_id)
 
 
 async def get_themes_from_bd(theme_id: int):

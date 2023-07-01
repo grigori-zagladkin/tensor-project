@@ -13,8 +13,7 @@ async def create_themes(data=Body()):
     title = data["title"]
     descr = data["description"]
     vote_id = data["voteId"]
-    await create_themes_to_bd(title, descr, vote_id)
-    return True
+    return await create_themes_to_bd(title, descr, vote_id)
 
 
 @themes_router.get('/get_themes')

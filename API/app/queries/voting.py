@@ -4,10 +4,11 @@ from datetime import date
 async def create_voting_to_bd(title: str, date_voting: date ):
     sql = '''
         INSERT INTO votings(title, date_voting) 
-        VALUES ($1, $2);
+        VALUES ($1, $2)
+        RETURNING *
     '''
     async with DB.pool.acquire() as conn:
-        await conn.execute(sql, title,date_voting)
+        return await conn.fetchrow(sql, title,date_voting)
 
 async def get_voting_from_bd(voting_id: int):
     sql = """
