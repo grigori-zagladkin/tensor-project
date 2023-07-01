@@ -11,6 +11,7 @@ interface ILIstProps {
   ItemTemplate: any;
   source: {
     url: string;
+    filter?: object;
   };
   onItemClick: Function;
 }
