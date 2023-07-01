@@ -1,7 +1,10 @@
 .wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
   display: flex;
   gap: 20px;
-  max-height: 400px;
   > video {
     visibility: hidden;
   }

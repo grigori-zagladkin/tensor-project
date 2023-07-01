@@ -50,15 +50,10 @@ const CameraComponent: React.FC<IProps> = ({ image, setImage }) => {
       }
     };
 
-    const intervalId = setInterval(handleExtractImage, 5000);
+    const intervalId = setInterval(handleExtractImage, 1000);
 
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
-        clearInterval(intervalId);
-      }
+      clearInterval(intervalId);
     };
   }, []);
 

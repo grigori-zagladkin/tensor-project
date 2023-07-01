@@ -5,6 +5,7 @@ import CameraComponent from "../Camera";
 import { VoteService } from "../../services/vote.service";
 import styles from "./Main.module.scss";
 import axios from "axios";
+import { MAIN_DOMAIN } from "../List/constants";
 
 interface IProps {
   theme: ITheme;
@@ -14,45 +15,36 @@ const EMPTY_VIEW_TEMPLATE = <div>EMPY</div>;
 
 let interval: number;
 
-let flag: boolean = true;
+let flag: boolean = false;
 
 const Main: FC<IProps> = ({ theme }) => {
   const [isShowSnapshot, setIsShowSnapshot] = useState(false);
   const [image, setImage] = useState("");
-  const [isSetted, setIsSetted] = useState(false);
-  const [result, setResult] = useState<{
-    Yes: number;
-    No: number;
-    Unsure: number;
-  }>({
-    Yes: 1,
-    No: 1,
-    Unsure: 1,
-  });
-  const _sendResult = async () => {
-    let _result = await axios
-      .post<{
-        Yes: number;
-        No: number;
-        Unsure: number;
-      }>(import.meta.env.VITE_API_URL + `/processing`, {
-        file: image,
-        theme_id: theme.theme_id,
-      })
-      .then((data) => data.data);
-    setResult(_result);
-  };
-  const setResultWithTimer = () => {
-    interval = setTimeout(_sendResult, 5000);
-  };
-  const finishVote = async () => {
-    await axios.post<ITheme>(import.meta.env.VITE_API_URL + `/processing`, {
-      file: image,
-      theme_id: theme.theme_id,
-      end_vote: true,
+  const [result, setResult] = useState(null);
+
+  const imageCapturedCallback = (image: string, flag: boolean = false) => {
+    setImage(image);
+    test(image, flag).then((data: any) => {
+      setResult(data);
     });
-    clearInterval(interval);
   };
+
+  const test = (image: string, end_vote: boolean): any => {
+    if (!image) {
+      return Promise.resolve();
+    }
+      return fetch(MAIN_DOMAIN + `/processing`, {
+          method: 'POST',
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({
+            theme_id: theme.theme_id,
+            file: image,
+            end_vote
+          })
+      }).then((res) => res.json())
+  }
+
+
   return (
     <>
       {!theme ? (
@@ -62,39 +54,32 @@ const Main: FC<IProps> = ({ theme }) => {
           <h1>{theme.title}</h1>
           <p style={{ textAlign: "left" }}>{theme.description}</p>
           {isShowSnapshot && (
-            <CameraComponent image={image} setImage={setImage} />
-          )}
-          {isShowSnapshot && image && (
-            <Button
-              onClick={async () => {
-                try {
-                  flag = false;
-                  finishVote();
-                } catch (error) {
-                  console.error(error);
-                  alert("Произошла ошибка");
-                }
-              }}
-              caption="Закончить"
-            />
+            <CameraComponent image={image} setImage={imageCapturedCallback} />
           )}
           {!isShowSnapshot && (
-            <Button
+              <Button
               onClick={() => {
-                setIsSetted(true);
                 setIsShowSnapshot(true);
-                setResultWithTimer();
               }}
               caption="Начать голосование"
-            />
-          )}
-          {result && isSetted && (
-            <div>
-              <div>За {result.Yes || 1}</div>
-              <div>Против {result.No || 1}</div>
-              <div>Воздержался {result.Unsure || 1}</div>
+            />)}
+
+          {result && (<div>
+            <div className="workspace__results">
+              <div>За {result.Yes}</div>
+              <div>Против {result.No}</div>
+              <div>Воздержался {result.Unsure}</div>
             </div>
-          )}
+            {isShowSnapshot && (
+                <Button
+                  onClick={async () => {
+                    setIsShowSnapshot(false);
+                    imageCapturedCallback(image, true);
+                  }}
+                  caption="Закончить"
+                />
+            )}
+          </div>)}
         </section>
       )}
     </>

@@ -55,6 +55,7 @@ const Layout: FC = () => {
             onClick={() => {
               setVoting(null);
               setShowThemes(false);
+              selectTheme(null);
             }}
           />
           {voting_id ? (

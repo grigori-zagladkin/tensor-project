@@ -20,9 +20,15 @@ interface ILIstProps {
   onDataLoad?: Function;
 }
 
+const EMPTY_VIEW: any = (
+  <div className='baseList__loader__container'>
+    <div className='baseList__loader'></div>
+  </div>
+);
+
 const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
   let { voting_id, setIsShowPopup } = useStore();
-  const [isDataLoaded, dataLoaded] = useState(false);
+  const [isDataLoading, endLoading] = useState(true);
   const [items, setItems] = useState([]);
 
   const onPopUpClosed = (data: ICreateTheme) => {
@@ -38,6 +44,7 @@ const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
     fetchData(props.source)
       .then((data) => {
         setItems(data as any);
+        endLoading(false);
         return Promise.resolve();
       })
       .then(() => {
@@ -49,18 +56,24 @@ const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
 
   return (
     <div className={`baseList__container ${props.className}`}>
-      <Popup
-        onClose={() => {
-          setIsShowPopup(false);
-        }}>
-        <CreateTheme voteId={voting_id} onCreate={onPopUpClosed} />
-      </Popup>
-      <ul className="baseList__container">
-        {items.map((el: any) => {
-          return (<props.ItemTemplate key={el.id} item={el} onClick={props.onItemClick} />);
-        })}
-      </ul>
-      <Button caption="Добавить" onClick={() => setIsShowPopup(true)} />
+      {isDataLoading ? EMPTY_VIEW : 
+        (
+          <div>
+            <Popup
+              onClose={() => {
+                setIsShowPopup(false);
+              }}>
+              <CreateTheme voteId={voting_id} onCreate={onPopUpClosed} />
+            </Popup>
+            <ul className="baseList__container">
+              {items.map((el: any) => {
+                return (<props.ItemTemplate key={el.id} item={el} onClick={props.onItemClick} />);
+              })}
+            </ul>
+            <Button caption="Добавить" onClick={() => setIsShowPopup(true)} />
+          </div>
+        )
+      }
     </div>
   );
 };
