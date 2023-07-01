@@ -14,25 +14,43 @@ const EMPTY_VIEW_TEMPLATE = <div>EMPY</div>;
 
 let interval: number;
 
-let flag: boolean;
+let flag: boolean = true;
 
 const Main: FC<IProps> = ({ theme }) => {
   const [isShowSnapshot, setIsShowSnapshot] = useState(false);
   const [image, setImage] = useState("");
-  const [result, setResult] = useState<{ color: string; value: number }[]>([]);
+  const [isSetted, setIsSetted] = useState(false);
+  const [result, setResult] = useState<{
+    Yes: number;
+    No: number;
+    Unsure: number;
+  }>({
+    Yes: 1,
+    No: 1,
+    Unsure: 1,
+  });
   const _sendResult = async () => {
-    if (flag) {
-      const _result = (await VoteService.sendResult(image, theme.id)).data
-        .result;
-      setResult(_result);
-      setResultWithTimer();
-    } else {
-    }
+    let _result = await axios
+      .post<{
+        Yes: number;
+        No: number;
+        Unsure: number;
+      }>(import.meta.env.VITE_API_URL + `/processing`, {
+        file: image,
+        theme_id: theme.theme_id,
+      })
+      .then((data) => data.data);
+    setResult(_result);
   };
   const setResultWithTimer = () => {
     interval = setTimeout(_sendResult, 5000);
   };
-  const finishVote = () => {
+  const finishVote = async () => {
+    await axios.post<ITheme>(import.meta.env.VITE_API_URL + `/processing`, {
+      file: image,
+      theme_id: theme.theme_id,
+      end_vote: true,
+    });
     clearInterval(interval);
   };
   return (
@@ -50,6 +68,7 @@ const Main: FC<IProps> = ({ theme }) => {
             <Button
               onClick={async () => {
                 try {
+                  flag = false;
                   finishVote();
                 } catch (error) {
                   console.error(error);
@@ -62,17 +81,18 @@ const Main: FC<IProps> = ({ theme }) => {
           {!isShowSnapshot && (
             <Button
               onClick={() => {
+                setIsSetted(true);
                 setIsShowSnapshot(true);
                 setResultWithTimer();
               }}
               caption="Начать голосование"
             />
           )}
-          {result.length > 1 && (
+          {result && isSetted && (
             <div>
-              <div>За {theme?.result[0]?.value || 1}</div>
-              <div>Против {theme?.result[1]?.value || 1}</div>
-              <div>Воздержался {theme?.result[2]?.value || 1}</div>
+              <div>За {result.Yes || 1}</div>
+              <div>Против {result.No || 1}</div>
+              <div>Воздержался {result.Unsure || 1}</div>
             </div>
           )}
         </section>

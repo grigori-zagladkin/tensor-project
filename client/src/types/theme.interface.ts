@@ -12,7 +12,7 @@ export interface ICreateTheme {
 }
 
 export interface ITheme {
-  id: number;
+  theme_id: number;
   title: string;
   description: string;
   createdAt: string;
