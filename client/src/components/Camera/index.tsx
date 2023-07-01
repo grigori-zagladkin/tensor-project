@@ -64,10 +64,12 @@ const CameraComponent: React.FC<IProps> = ({ image, setImage }) => {
 
   return (
     <div className={styles.wrapper}>
+      {image && (
+        <div className={styles.cameraImg}>
+          <img src={image} alt="фотка" />
+        </div>
+      )}
       <video ref={videoRef} autoPlay playsInline />
-      <div className={styles.cameraImg}>
-        <img src={image} alt="фотка" />
-      </div>
     </div>
   );
 };
