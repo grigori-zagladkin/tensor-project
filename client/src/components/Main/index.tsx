@@ -9,11 +9,15 @@ interface IProps {
   theme: ITheme;
 }
 
+const EMPTY_VIEW_TEMPLATE = (<div>EMPY</div>);
+
 const Main: FC<IProps> = ({ theme }) => {
   const [isShowSnapshot, setIsShowSnapshot] = useState(false);
   const [image, setImage] = useState("");
   return (
-    <section className={styles.wrapper}>
+    <>
+    {!theme ? EMPTY_VIEW_TEMPLATE : (
+      <section className={styles.wrapper}>
       <h1>{theme.title}</h1>
       <p style={{ textAlign: "left" }}>{theme.description}</p>
       {isShowSnapshot && <CameraComponent image={image} setImage={setImage} />}
@@ -39,6 +43,8 @@ const Main: FC<IProps> = ({ theme }) => {
         />
       )}
     </section>
+    )}
+    </>
   );
 };
 

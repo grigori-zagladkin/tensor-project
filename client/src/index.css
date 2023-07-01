@@ -90,13 +90,14 @@ button:focus-visible {
 
 .naviagtion_container {
   flex: 0 1 30vw;
-  min-width: 200px;
-  max-width: 350px;
+  min-width: 300px;
+  max-width: 300px;
   overflow: hidden;
 }
 
 .workspace__container {
   flex: 1;
+  overflow: hidden;
 }
 
 .topic-selected {

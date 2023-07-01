@@ -2,9 +2,12 @@ import { FC, PropsWithChildren, useState } from "react";
 import BaseList from "../List";
 import VoteItem from "../VoteItem";
 import Button from "../Button";
+import Main from "../Main";
+import { ITheme } from "../../types/theme.interface";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
-  const [isTopicSelected, selectTopic] = useState(false);
+  const [selectedTopic, selectTopic] = useState(null);
+  const [selectedTheme, selectTheme] = useState(null);
 
 
 
@@ -16,29 +19,38 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       }}>
       <div className='naviagtion_container' style={{display: 'flex'}}>
         <BaseList
-          className={`navigation__list ${isTopicSelected ? 'topic-selected' : ''}`}
+          className={`navigation__list ${selectedTopic ? 'topic-selected' : ''}`}
           ItemTemplate={VoteItem}
           source={{
             url: "",
           }}
-          onItemClick={() => {
-            selectTopic(() => true);
+          onItemClick={(item: object) => {
+            selectTopic(item as any);
           }}
         />
-        <div className={`navigation__topics__list navigation__list ${isTopicSelected ? 'topic-selected' : ''}`}>
+        <div className={`navigation__topics__list navigation__list ${selectedTopic ? 'topic-selected' : ''}`}>
           <Button caption="Назад" onClick={() => {
-            selectTopic(() => false);
+            selectTopic(null);
           }}/>
           <BaseList
             ItemTemplate={VoteItem}
             source={{
               url: "",
+              filter: {
+                voteId: (selectTopic as any).id
+              }
             }}
-            onItemClick={() => {}}
+            onItemClick={(items: object) => {
+              selectTheme(items as any);
+            }}
           />
         </div>
       </div>
-      <div  className='workspace__container'>{children}</div>
+      <div  className='workspace__container'>
+        <Main
+          theme={selectedTheme as any}
+        />
+      </div>
     </div>
   );
 };
