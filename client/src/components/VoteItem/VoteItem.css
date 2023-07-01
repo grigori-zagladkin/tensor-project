@@ -1,39 +1,4 @@
-.voteItem{
-    padding:5px 0 5px 10px;
-    cursor: pointer;
-    transition: 0.1s;
-    display: flex;
-    justify-content: space-between;
-}
-.voteItem__title{
-    font-size: 18px;
-}
-.voteItem__date{
-    font-size: 12px;
-}
-.voteItem:hover{
-background-color:#2e2e2e54 ;
-transform: scale(1.02);
-}
-.voteItem__status {
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
-}
-
-.voteItem__status__success {
-    background-color: green;
-}
-
-.voteItem__status__yellow {
-    background-color: orange;
-}
-
-.voteItem__status__error {
-    background-color: red;
-}
-
-.voteItem__status__container {
+.voteItem__status__container{
     flex: 0 1 32px;
     display: flex;
     align-items: center;
