@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 import Button from "../Button";
-import { ThemeService } from "../../services/theme.service";
 import "./CreateTheme.css";
 import Input from "../Input";
 import { ICreateTheme } from "../../types/theme.interface";
 
-const CreateTheme: FC<{ onCreate: (data: ICreateTheme) => void }> = ({
-  onCreate,
-}) => {
+const CreateTheme: FC<{
+  onCreate: (data: ICreateTheme) => void;
+  voteId: number;
+}> = ({ onCreate, voteId }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   return (
@@ -29,8 +29,7 @@ const CreateTheme: FC<{ onCreate: (data: ICreateTheme) => void }> = ({
       <Button
         onClick={() => {
           try {
-            // await ThemeService.createTheme({ title, description });
-            onCreate({ title, description });
+            onCreate({ title, description, voteId });
             alert("Успешно");
           } catch (error) {
             console.error(error);

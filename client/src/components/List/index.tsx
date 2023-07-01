@@ -36,6 +36,7 @@ const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick, className }) => {
         isShow={isShow}
       >
         <CreateTheme
+          voteId={}
           onCreate={(data: ICreateTheme) => {
             setItems(
               (prev: any) =>
