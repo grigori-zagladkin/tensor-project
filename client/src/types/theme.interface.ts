@@ -8,7 +8,7 @@ export interface IResult {
 export interface ICreateTheme {
   title: string;
   description: string;
-  voteId: number;
+  voteId?: number | null;
 }
 
 export interface ITheme {

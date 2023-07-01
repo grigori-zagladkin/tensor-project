@@ -1,3 +1,5 @@
+import { MAIN_DOMAIN } from './constants';
+
 interface ISource {
     url: string;
     filter?: object;
@@ -17,7 +19,7 @@ function fetchData(source: ISource): Promise<any> {
         urlParams = '?' + new URLSearchParams(RES_OBJ);
     }
 
-    return fetch('http://192.168.105.60:1500' + source.url + urlParams, {method: 'GET'})
+    return fetch(MAIN_DOMAIN + source.url + urlParams, {method: 'GET'})
         .then((res) => res.json());
 }
 
