@@ -4,9 +4,9 @@ import './ThemeItem.css';
 interface IProps {
     key: any;
     item: {
-        id: number;
+        theme_id: number;
         title: string,
-        result: Array<{color: string, value:number}>;
+        res: Array<{color: string, value:number}>;
         date: Date;
         description: string;
     },
@@ -27,13 +27,13 @@ function getClass(color: string): string {
 
 const ThemeItem: FC<IProps> = (props) => {
     return (
-        <div key={props.item.id} className='baseItem' onClick={() => props.onClick(props.item)}>
+        <div key={props.item.theme_id} className='baseItem' onClick={() => props.onClick(props.item)}>
         <div>  
             <p className ="baseItem__title">{props.item.title}</p>
-            <p className ="baseItem__date">{props.item.date.toDateString()}</p>
+            <p className ="baseItem__date">{props.item.description}</p>
         </div>
         <div className='themeItem__status__container ' > 
-            { props.item.result.map((el)=>{
+            { props.item.res?.map((el)=>{
                 return (
                     <div className={`baseItem__status baseItem__status__${getClass(el.color)} themeItem__status`}>
                         <p className='themeItem__status__value'>{el.value}</p>

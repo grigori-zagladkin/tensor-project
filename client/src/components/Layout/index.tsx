@@ -1,58 +1,76 @@
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, useState } from "react";
+import { create } from 'zustand';
 import BaseList from "../List";
 import VoteItem from "../VoteItem";
 import Button from "../Button";
 import Main from "../Main";
 import ThemeItem from "../ThemeItem";
-import { ITheme } from "../../types/theme.interface";
+
+type Store = {
+  voting_id: number | null;
+  setVoting: Function;
+};
+
+const useStore = create<Store>()((set) => ({
+  voting_id: null,
+  setVoting: (id: number | null) => set((s) => ({ voting_id: id }))
+}));
 
 const Layout: FC = () => {
-  const [selectedTopic, selectTopic] = useState(null);
+  const { voting_id, setVoting } = useStore();
   const [selectedTheme, selectTheme] = useState(null);
-
+  const [showThemes, setShowThemes] = useState(false);
+  
   return (
     <div
       style={{
         display: "flex",
         width: "100%",
+        gap: '12px'
       }}
     >
       <div className="naviagtion_container" style={{ display: "flex" }}>
         <BaseList
           className={`navigation__list ${
-            selectedTopic ? "topic-selected" : ""
+            showThemes ? "topic-selected" : ""
           }`}
           ItemTemplate={VoteItem}
           source={{
-            url: "",
+            url: "/get_all_voting",
           }}
-          onItemClick={(item: object) => {
-            selectTopic(item as any);
+          onItemClick={(item: any) => {
+            setVoting(item.voting_id);
           }}
         />
         <div
           className={`navigation__topics__list navigation__list ${
-            selectedTopic ? "topic-selected" : ""
+            showThemes ? "topic-selected" : ""
           }`}
         >
           <Button
             caption="Назад"
             onClick={() => {
-              selectTopic(null);
+              setVoting(null);
+              setShowThemes(false);
             }}
           />
-          <BaseList
-            ItemTemplate={ThemeItem}
-            source={{
-              url: "",
-              filter: {
-                voteId: (selectTopic as any).id,
-              },
-            }}
-            onItemClick={(items: object) => {
-              selectTheme(items as any);
-            }}
-          />
+          {voting_id ? (
+            <BaseList
+              ItemTemplate={ThemeItem}
+              onDataLoad={() => {
+                setShowThemes(true);
+              }}
+              source={{
+                url: '/get_all_themes',
+                filter: {
+                  vote_id: voting_id,
+                },
+              }}
+              onItemClick={(items: object) => {
+                selectTheme(items as any);
+              }}
+            />
+          ) : (<div></div>)}
         </div>
       </div>
       <div className="workspace__container">
