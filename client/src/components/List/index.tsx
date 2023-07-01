@@ -5,6 +5,7 @@ import "./List.css";
 import Popup from "../Popup";
 import CreateTheme from "../CreateTheme";
 import { ICreateTheme } from "../../types/theme.interface";
+import { fetchData } from './dataGetter';
 
 interface ILIstProps {
   className?: string;
@@ -14,21 +15,30 @@ interface ILIstProps {
     filter?: object;
   };
   onItemClick: Function;
+  onDataLoad?: Function;
 }
 
-const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick, className }) => {
+const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
   const [items, setItems] = useState([]);
 
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
-    getData().then((data) => {
+    if (items.length) {
+      return;
+    }
+    fetchData(props.source).then((data) => {
       setItems(data as any);
+      return Promise.resolve()
+    }).then(() => {
+      if (props.onDataLoad) {
+        props.onDataLoad();
+      }
     });
   }, []);
 
   return (
-    <div className={`baseList__container ${className}`}>
+    <div className={`baseList__container ${props.className}`}>
       <Popup
         onClose={() => {
           setIsShow(false);
@@ -55,7 +65,7 @@ const BaseList: FC<ILIstProps> = ({ ItemTemplate, onItemClick, className }) => {
       </Popup>
       <ul className="baseList__container">
         {items.map((el: any) => {
-          return <ItemTemplate key={el.id} item={el} onClick={onItemClick} />;
+          return <props.ItemTemplate key={el.id} item={el} onClick={props.onItemClick} />;
         })}
       </ul>
       <Button caption="Добавить" onClick={() => setIsShow(true)} />
