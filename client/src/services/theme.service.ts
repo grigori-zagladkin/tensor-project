@@ -9,7 +9,7 @@ export const ThemeService = {
     );
   },
   async getAllThemes() {
-    return await axios.get(import.meta.env.VITE_API_URL + "/get_themes");
+    return await axios.get(import.meta.env.VITE_API_URL + "/get_all_themes");
   },
   async getThemeById(id: number) {
     return axios.get(import.meta.env.VITE_API_URL + `/get_themes/${id}`);
