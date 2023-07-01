@@ -3,6 +3,7 @@ import BaseList from "../List";
 import VoteItem from "../VoteItem";
 import Button from "../Button";
 import Main from "../Main";
+import ThemeItem from "../ThemeItem";
 import { ITheme } from "../../types/theme.interface";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
@@ -33,7 +34,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
             selectTopic(null);
           }}/>
           <BaseList
-            ItemTemplate={VoteItem}
+            ItemTemplate={ThemeItem}
             source={{
               url: "",
               filter: {
