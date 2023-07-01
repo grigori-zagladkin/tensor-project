@@ -3,6 +3,7 @@ import base64
 from fastapi import APIRouter, Body
 import numpy as np
 import cv2
+from vid_test import get_trashes_and_hvc_for_rgb
 
 #
 image_router = APIRouter(tags=['Обработка'])
@@ -15,4 +16,10 @@ async def image_proccessing(data = Body()):
     image_64 = image_64[image_64.find(",")+1:]
     nparr = np.frombuffer(base64.b64decode(image_64), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    stats = get_trashes_and_hvc_for_rgb(img)
+    yes = stats["Green"]
+    no = stats["Red"]
+    fifty = stats["Yellow"]
+    if data["end_vote"]:
+        await create_result_to_bd(data["theme_id"], [yes,no,fifty])
     return image_64

@@ -13,10 +13,10 @@ COLOR_SCHEME = {
 
 #
 COLOR_HUE_RANGE = {
+    "Green": [43, 80],
     "Red": [145, 175],  # [0,15] also
     # "Green": [40, 70],
     "Yellow": [30, 40],
-    "Green": [43, 80],
     # "Blue": [90, 140],
     # "Blue": [102, 106],
    

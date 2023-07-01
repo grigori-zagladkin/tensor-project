@@ -57,8 +57,8 @@ while True:
 
     if ret is True:
         result = get_trashes_and_hvc_for_rgb(frame)
-        cv.imshow("result", value) 
-        print(result)
+
+
         k = cv.waitKeyEx(100)
         if k == 27:  # ESC
             break
