@@ -15,5 +15,6 @@ export interface ITheme {
   title: string;
   description: string;
   createdAt: string;
+  result: Array<{color: string, value: number}>;
   // result: IResult;
 }

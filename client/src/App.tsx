@@ -1,13 +1,8 @@
-import { useState } from "react";
 import "./App.css";
 import MainPage from "./pages";
 
 function App() {
-  return (
-    <>
-      <MainPage />
-    </>
-  );
+  return (<MainPage />);
 }
 
 export default App;
