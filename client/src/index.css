@@ -85,7 +85,7 @@ button:focus-visible {
 
 .navigation__list {
   min-width: 100%;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .naviagtion_container {
