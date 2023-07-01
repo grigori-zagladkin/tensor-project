@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 from vid_test import get_trashes_and_hvc_for_rgb
 from app.queries.image import create_result_to_bd
-#
+
 image_router = APIRouter(tags=['Обработка'])
 #поступает картинка, смотрим цвета, анлизируем, возвращаем обратно
 #разбить бэйс 64(удалить лишнее),с нампай переганяю в массив из массива с СВ делаю картинку , получаю обратно
