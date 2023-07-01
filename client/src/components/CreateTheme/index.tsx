@@ -3,11 +3,13 @@ import Button from "../Button";
 import "./CreateTheme.css";
 import Input from "../Input";
 import { ICreateTheme } from "../../types/theme.interface";
+import { useStore } from "../Layout";
 
 const CreateTheme: FC<{
   onCreate: (data: ICreateTheme) => void;
   voteId: number;
 }> = ({ onCreate, voteId }) => {
+  const { setIsShowPopup } = useStore();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   return (
@@ -30,6 +32,7 @@ const CreateTheme: FC<{
         onClick={() => {
           try {
             onCreate({ title, description, voteId });
+            setIsShowPopup(false);
             alert("Успешно");
           } catch (error) {
             console.error(error);

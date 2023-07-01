@@ -5,7 +5,9 @@ import "./List.css";
 import Popup from "../Popup";
 import CreateTheme from "../CreateTheme";
 import { ICreateTheme } from "../../types/theme.interface";
-import { fetchData } from './dataGetter';
+import { fetchData } from "./dataGetter";
+import { useStore } from "../Layout";
+import axios from "axios";
 
 interface ILIstProps {
   className?: string;
@@ -13,12 +15,15 @@ interface ILIstProps {
   source: {
     url: string;
     filter?: object;
+    createUrl: string;
   };
   onItemClick: Function;
   onDataLoad?: Function;
 }
 
 const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
+  let { voting_id, setIsShowPopup } = useStore();
+
   const [items, setItems] = useState([]);
 
   const [isShow, setIsShow] = useState(false);
@@ -27,48 +32,47 @@ const BaseList: FC<ILIstProps> = (props: ILIstProps) => {
     if (items.length) {
       return;
     }
-    fetchData(props.source).then((data) => {
-      setItems(data as any);
-      return Promise.resolve()
-    }).then(() => {
-      if (props.onDataLoad) {
-        props.onDataLoad();
-      }
-    });
+    fetchData(props.source)
+      .then((data) => {
+        setItems(data as any);
+        return Promise.resolve();
+      })
+      .then(() => {
+        if (props.onDataLoad) {
+          props.onDataLoad();
+        }
+      });
   }, []);
 
   return (
     <div className={`baseList__container ${props.className}`}>
       <Popup
         onClose={() => {
-          setIsShow(false);
+          setIsShowPopup(false);
         }}
-        isShow={isShow}
       >
         <CreateTheme
-          voteId={}
-          onCreate={(data: ICreateTheme) => {
-            setItems(
-              (prev: any) =>
-                [
-                  ...prev,
-                  {
-                    id: new Date().getTime(),
-                    title: data.title,
-                    description: data.description,
-                    date: new Date(),
-                  },
-                ] as any
-            );
+          voteId={voting_id || 1}
+          onCreate={async (data: ICreateTheme) => {
+            let _data = await (
+              await axios.post(props.source.createUrl, data)
+            ).data;
+            setItems((prev: any) => [...prev, _data] as any);
           }}
         />
       </Popup>
       <ul className="baseList__container">
         {items.map((el: any) => {
-          return <props.ItemTemplate key={el.id} item={el} onClick={props.onItemClick} />;
+          return (
+            <props.ItemTemplate
+              key={el.id}
+              item={el}
+              onClick={props.onItemClick}
+            />
+          );
         })}
       </ul>
-      <Button caption="Добавить" onClick={() => setIsShow(true)} />
+      <Button caption="Добавить" onClick={() => setIsShowPopup(true)} />
     </div>
   );
 };
