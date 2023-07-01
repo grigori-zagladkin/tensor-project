@@ -2,14 +2,17 @@ from fastapi import APIRouter
 from app.queries.voting import create_voting_to_bd
 from app.queries.voting import get_voting_from_bd
 from app.queries.voting import get_all_voting_from_bd
+from fastapi import Body
 from datetime import date
 
 voting_router = APIRouter(tags=['Голосование'])
 
 
 @voting_router.post('/create_voting')
-async def create_voting(title: str,date_voting: date):
-    await create_voting_to_bd(title,date_voting)
+async def create_voting(data=Body()):
+    title = data['title']
+    date_voting = date.today()
+    await create_voting_to_bd(title, date_voting)
     return True #поменять на тру
 
 @voting_router.get('/get_voting')

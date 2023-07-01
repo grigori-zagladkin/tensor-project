@@ -20,10 +20,11 @@ async def get_themes_from_bd(theme_id: int):
         return result
 
 
-async def get_all_themes_from_bd():
+async def get_all_themes_from_bd(vote_id):
     sql = """
         SELECT * FROM themes
+        where vote_id = $1
     """
     async with DB.pool.acquire() as conn:
-        result = await conn.fetchrow(sql)
+        result = await conn.fetch(sql, vote_id)
         return result

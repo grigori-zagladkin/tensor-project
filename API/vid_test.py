@@ -49,27 +49,6 @@ def get_trashes_and_hvc_for_rgb(image):
     return res
 
 
-capture = cv.VideoCapture(0 + cv.CAP_DSHOW)
-capture.set(cv.CAP_PROP_FPS, 30)
-
-while True:
-    ret, frame = capture.read()
-
-    if ret is True:
-        result = get_trashes_and_hvc_for_rgb(frame)
-
-
-        k = cv.waitKeyEx(100)
-        if k == 27:  # ESC
-            break
-    else:
-        break
-
-cv.waitKey(0)
-capture.release()
-
-
-cv.destroyAllWindows()
 
 # Перевод в hcv
 # Получение цветов (нахождение маски)
