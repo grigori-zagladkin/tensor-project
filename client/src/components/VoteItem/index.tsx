@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import './VoteItem.css';
+import '../stylesItems/stylesItems.css';
 
 interface IProps {
     item: {
+        id: number;
         title: string; //18
         date: Date; // 12
         status: number;
@@ -25,13 +27,13 @@ function getStatusName(statusIndex: number): string {
 
 const VoteItem : FC <IProps> = (Props) => {
     return (
-        <div className='voteItem' onClick={() => Props.onClick(Props.item)}>
+        <div key={Props.item.id} className='baseItem' onClick={() => Props.onClick(Props.item)}>
             <div>
-                <p className ="voteItem__title">{Props.item.title}</p>
-                <p className ="voteItem__date">{Props.item.date.toDateString()}</p>
+                <p className ="baseItem__title">{Props.item.title}</p>
+                <p className ="baseItem__date">{Props.item.date.toDateString()}</p>
             </div>
-            <div className='voteItem__status__container ' style={{flex: '0 1 30px'}}>
-                <div className={`voteItem__status voteItem__status__${getStatusName(Props.item.status)}`}></div>
+            <div className='voteItem__status__container ' >
+                <div className={`baseItem__status baseItem__status__${getStatusName(Props.item.status)}`}></div>
             </div>
         </div>
 

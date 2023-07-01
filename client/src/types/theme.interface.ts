@@ -8,6 +8,7 @@ export interface IResult {
 export interface ICreateTheme {
   title: string;
   description: string;
+  result: Array<{ color: string; value: number }>;
 }
 
 export interface ITheme {
@@ -15,6 +16,6 @@ export interface ITheme {
   title: string;
   description: string;
   createdAt: string;
-  result: Array<{color: string, value: number}>;
+  result: Array<{ color: string; value: number }>;
   // result: IResult;
 }

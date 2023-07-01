@@ -5,6 +5,7 @@ export interface IVoteResult {
 
 export interface ICreateVote {
   title: string;
+  result: any[];
 }
 
 export interface IVote {
