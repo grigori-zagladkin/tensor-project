@@ -1,11 +1,21 @@
 from fastapi import APIRouter
-from app.queries.topic import create_themes_to_bd
+from app.queries.themes import create_themes_to_bd
+from app.queries.themes import get_themes_from_bd
+from app.queries.themes import get_all_themes_from_bd
 
 themes_router = APIRouter(tags =['Темы'])
 
 # id int, name str , content str, result [3]
 
-@themes_router.post('/create_themess')
+@themes_router.post('/create_themes')
 async def create_themes(title : str, descr:str, vote_id: int):
     await create_themes_to_bd(title, descr, vote_id)
     return True
+
+@themes_router.get('/get_themes')
+async def get_themes(theme_id : int):
+    return await get_themes_from_bd(theme_id)
+
+@themes_router.get('/get_all_themes')
+async def get_all_themes():
+    return await get_all_themes_from_bd()
