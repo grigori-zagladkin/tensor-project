@@ -39,7 +39,7 @@ const Layout: FC = () => {
           ItemTemplate={VoteItem}
           source={{
             url: "/get_all_voting",
-            createUrl: "http://192.168.105.60:1500/create_voting",
+            createUrl: "/create_voting",
           }}
           onItemClick={(item: any) => {
             setVoting(item.voting_id);
@@ -68,7 +68,7 @@ const Layout: FC = () => {
                 filter: {
                   vote_id: voting_id,
                 },
-                createUrl: "http://192.168.105.60:1500/create_themes",
+                createUrl: "/create_themes",
               }}
               onItemClick={(items: object) => {
                 selectTheme(items as any);

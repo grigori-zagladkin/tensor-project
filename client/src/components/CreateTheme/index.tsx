@@ -1,46 +1,35 @@
-import { FC, useState } from "react";
+import { FC, useState} from "react";
 import Button from "../Button";
 import "./CreateTheme.css";
 import Input from "../Input";
 import { ICreateTheme } from "../../types/theme.interface";
 import { useStore } from "../Layout";
 
-const CreateTheme: FC<{
+interface IProps {
   onCreate: (data: ICreateTheme) => void;
-  voteId: number;
-}> = ({ onCreate, voteId }) => {
+  voteId: number | null;
+}
+
+const CreateTheme: FC<IProps> = ({ onCreate, voteId }) => {
   const { setIsShowPopup } = useStore();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const titleChangedCallback: any = (el: any) => setTitle(el.target.value);
+  const descrChangedCallback: any = (el: any) => setDescription(el.target.value);
+  const btnClickedCallback: any = () => {
+    onCreate({ title, description, voteId});
+    setIsShowPopup(false);
+  };
+
   return (
     <form className="form">
-      <Input
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
-        placeholder="Название"
-      />
-      <Input
-        value={description}
-        onChange={(e) => {
-          setDescription(e.target.value);
-        }}
-        placeholder={"Описание"}
-      />
-      <Button
-        onClick={() => {
-          try {
-            onCreate({ title, description, voteId });
-            setIsShowPopup(false);
-            alert("Успешно");
-          } catch (error) {
-            console.error(error);
-            alert("Произошла ошибка");
-          }
-        }}
-        caption="Создать тему"
-      />
+      <Input onChange={titleChangedCallback} placeholder="Название" />
+      { voteId ? (
+        <Input onChange={descrChangedCallback} placeholder={"Описание"} />
+      ) : '' } 
+      <Button caption="Создать тему" onClick={btnClickedCallback} />
     </form>
   );
 };
