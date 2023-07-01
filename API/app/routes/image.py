@@ -22,6 +22,6 @@ async def image_proccessing(data=Body()):
     yes = stats["Green"]
     no = stats["Red"]
     fifty = stats["Yellow"]
-    if data["end_vote"]:
+    if data["end_vote"] and data.get("theme_id"):
         await create_result_to_bd(data["theme_id"], [yes,no,fifty])
     return stats
