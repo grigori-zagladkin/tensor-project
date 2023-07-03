@@ -19,9 +19,9 @@ async def image_proccessing(data=Body()):
     nparr = np.frombuffer(base64.b64decode(image_64), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     stats = get_trashes_and_hvc_for_rgb(img)
-    yes = stats["Green"]
-    no = stats["Red"]
-    fifty = stats["Yellow"]
+    yes = stats["Yes"]
+    no = stats["No"]
+    fifty = stats["Unsure"]
     if data["end_vote"] and data.get("theme_id"):
         await create_result_to_bd(data["theme_id"], [yes,no,fifty])
     return stats
