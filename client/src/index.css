@@ -103,3 +103,10 @@ button:focus-visible {
 .topic-selected {
   transform: translateX(-100%);
 }
+
+.workspace__results {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}

@@ -18,6 +18,13 @@
     animation-iteration-count: infinite;
 }
 
+.baseList__loader__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}
+
 @keyframes loader {
     0% {
         transform: rotate(0);

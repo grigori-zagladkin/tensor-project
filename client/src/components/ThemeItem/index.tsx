@@ -6,7 +6,7 @@ interface IProps {
     item: {
         theme_id: number;
         title: string,
-        res: Array<{color: string, value:number}>;
+        res: {[key: string]: number};
         date: Date;
         description: string;
     },
@@ -18,9 +18,9 @@ interface IStatuses {
 
 function getClass(color: string): string {
     const COLORS: IStatuses = {
-        'Red': 'error',
-        'Yellow': 'yellow',
-        'Green': 'success'
+        'No': 'error',
+        'Unsure': 'yellow',
+        'Yes': 'success'
     };
     return COLORS[color];
 }
@@ -30,13 +30,12 @@ const ThemeItem: FC<IProps> = (props) => {
         <div key={props.item.theme_id} className='baseItem' onClick={() => props.onClick(props.item)}>
         <div>  
             <p className ="baseItem__title">{props.item.title}</p>
-            <p className ="baseItem__date">{props.item.description}</p>
         </div>
         <div className='themeItem__status__container ' > 
-            { props.item.res?.map((el)=>{
+            { Object.keys(JSON.parse(props.item.res as any))?.map((el)=>{
                 return (
-                    <div className={`baseItem__status baseItem__status__${getClass(el.color)} themeItem__status`}>
-                        <p className='themeItem__status__value'>{el.value}</p>
+                    <div className={`baseItem__status baseItem__status__${getClass(el)} themeItem__status`}>
+                        <p className='themeItem__status__value'>{JSON.parse(props.item.res as any)[el]}</p>
                     </div>
                     );
             }) }

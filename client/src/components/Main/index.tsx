@@ -5,6 +5,7 @@ import CameraComponent from "../Camera";
 import { VoteService } from "../../services/vote.service";
 import styles from "./Main.module.scss";
 import axios from "axios";
+import { MAIN_DOMAIN } from "../List/constants";
 
 interface IProps {
   theme: ITheme;
@@ -14,27 +15,36 @@ const EMPTY_VIEW_TEMPLATE = <div>EMPY</div>;
 
 let interval: number;
 
-let flag: boolean;
+let flag: boolean = false;
 
 const Main: FC<IProps> = ({ theme }) => {
   const [isShowSnapshot, setIsShowSnapshot] = useState(false);
   const [image, setImage] = useState("");
-  const [result, setResult] = useState<{ color: string; value: number }[]>([]);
-  const _sendResult = async () => {
-    if (flag) {
-      const _result = (await VoteService.sendResult(image, theme.id)).data
-        .result;
-      setResult(_result);
-      setResultWithTimer();
-    } else {
+  const [result, setResult] = useState(null);
+
+  const imageCapturedCallback = (image: string, flag: boolean = false) => {
+    setImage(image);
+    test(image, flag).then((data: any) => {
+      setResult(data);
+    });
+  };
+
+  const test = (image: string, end_vote: boolean): any => {
+    if (!image) {
+      return Promise.resolve();
     }
-  };
-  const setResultWithTimer = () => {
-    interval = setTimeout(_sendResult, 5000);
-  };
-  const finishVote = () => {
-    clearInterval(interval);
-  };
+      return fetch(MAIN_DOMAIN + `/processing`, {
+          method: 'POST',
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({
+            theme_id: theme.theme_id,
+            file: image,
+            end_vote
+          })
+      }).then((res) => res.json())
+  }
+
+
   return (
     <>
       {!theme ? (
@@ -44,37 +54,32 @@ const Main: FC<IProps> = ({ theme }) => {
           <h1>{theme.title}</h1>
           <p style={{ textAlign: "left" }}>{theme.description}</p>
           {isShowSnapshot && (
-            <CameraComponent image={image} setImage={setImage} />
-          )}
-          {isShowSnapshot && image && (
-            <Button
-              onClick={async () => {
-                try {
-                  finishVote();
-                } catch (error) {
-                  console.error(error);
-                  alert("Произошла ошибка");
-                }
-              }}
-              caption="Закончить"
-            />
+            <CameraComponent image={image} setImage={imageCapturedCallback} />
           )}
           {!isShowSnapshot && (
-            <Button
+              <Button
               onClick={() => {
                 setIsShowSnapshot(true);
-                setResultWithTimer();
               }}
               caption="Начать голосование"
-            />
-          )}
-          {result.length > 1 && (
-            <div>
-              <div>За {theme?.result[0]?.value || 1}</div>
-              <div>Против {theme?.result[1]?.value || 1}</div>
-              <div>Воздержался {theme?.result[2]?.value || 1}</div>
+            />)}
+
+          {result && (<div>
+            <div className="workspace__results">
+              <div>За {result.Yes}</div>
+              <div>Против {result.No}</div>
+              <div>Воздержался {result.Unsure}</div>
             </div>
-          )}
+            {isShowSnapshot && (
+                <Button
+                  onClick={async () => {
+                    setIsShowSnapshot(false);
+                    imageCapturedCallback(image, true);
+                  }}
+                  caption="Закончить"
+                />
+            )}
+          </div>)}
         </section>
       )}
     </>

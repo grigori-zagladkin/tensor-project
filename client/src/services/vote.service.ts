@@ -6,7 +6,10 @@ export const VoteService = {
   async sendResult(img: string, themeId: number) {
     return await axios.post<ITheme>(
       import.meta.env.VITE_API_URL + `/processing`,
-      img
+      {
+        file: img,
+        theme_id: themeId,
+      }
     );
   },
   async getAllVote() {
